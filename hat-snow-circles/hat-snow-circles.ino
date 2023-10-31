@@ -3,23 +3,18 @@
 
 
 #include <ezButton.h>  // the library to use for SW pin
+#include "Encoder.h"
+#include <ESP32Encoder.h>
 
 #define CLK_PIN 5  // ESP32 pin GPIO25 connected to the rotary encoder's CLK pin
 #define DT_PIN  18 // ESP32 pin GPIO26 connected to the rotary encoder's DT pin
 #define SW_PIN  19 // ESP32 pin GPIO27 connected to the rotary encoder's SW pin
 
-#define DIRECTION_CW  0   // clockwise direction
-#define DIRECTION_CCW 1  // counter-clockwise direction
-
-volatile int counter = 0;
-volatile int direction = DIRECTION_CW;
-volatile unsigned long last_time;  // for debouncing
-int prev_counter;
-
-ezButton button(SW_PIN);  // create ezButton object that attach to pin 7;
+Encoder encoder(DT_PIN, CLK_PIN);
+//ESP32Encoder encoder;
 
 
-int random_dots = 0;
+ezButton button(SW_PIN);
 
 
 #include <FastLED.h>
@@ -28,7 +23,7 @@ int random_dots = 0;
 // Here's how to control the LEDs from any two pins:
 #define DATAPIN    13
 
-#define NUMX 33.5
+// dimensions of the hat matrix
 const float px_dist = 1.6;
 const float px_per_cm = 34.5;
 const float width = px_per_cm*px_dist;
@@ -45,47 +40,15 @@ Point coords[NUMPIXELS];
 
 
 
-void IRAM_ATTR ISR_encoder() 
-{
-  //if ((millis() - last_time) < 10)  // debounce time is 50ms
-  //  return;
-
-  if (digitalRead(DT_PIN) == HIGH) {
-    // the encoder is rotating in counter-clockwise direction => decrease the counter
-    counter--;
-    direction = DIRECTION_CCW;
-  } else {
-    // the encoder is rotating in clockwise direction => increase the counter
-    counter++;
-    direction = DIRECTION_CW;
-  }
-
-  // limit the counter
-  if (counter < 0) {
-    counter = 0;
-  } else if(counter > 10) {
-    counter = 10;
-  }
-
-  last_time = millis();
-}
-
-
 void setup() 
 {
-  Serial.begin(9600);
+  //encoder.attachFullQuad ( DT_PIN, CLK_PIN );
+  //encoder.setCount ( 0 );
+  
+  Serial.begin(115200);
 
-  // configure encoder pins as inputs
-  pinMode(CLK_PIN, INPUT);
-  pinMode(DT_PIN, INPUT);
   button.setDebounceTime(50);  // set debounce time to 50 milliseconds
 
-    
-    
-  // use interrupt for CLK pin is enough
-  // call ISR_encoder() when CLK pin changes from LOW to HIGH
-  attachInterrupt(digitalPinToInterrupt(CLK_PIN), ISR_encoder, RISING);
-  
     
   FastLED.addLeds<WS2812B, DATAPIN, GRB>(leds, NUMPIXELS);
 
@@ -113,7 +76,7 @@ float x = 8.0;
 float y = 8.0;
 float c = 0.0;
 
-float vx = 0.5;
+float vx = 0.8;
 float vy = 0.1;
 
 float s = 0;
@@ -130,48 +93,38 @@ float checkCircle(const Point& c, float x, float y)
   
   float d = dx*dx + dy*dy;  
 
-  return d;
+  return sqrt(d);
 }
 
-void getButtons() {
-    button.loop();  // MUST call the loop() function first
-    
-   if (prev_counter != counter) {
-    Serial.print("Rotary Encoder:: direction: ");
-    if (direction == DIRECTION_CW)
-      Serial.print("CLOCKWISE");
-    else
-      Serial.print("ANTICLOCKWISE");
-
-    Serial.print(" - count: ");
-    Serial.println(counter);
-
-    prev_counter = counter;
-  }
-
-  if (button.isPressed()) {
-    Serial.println("The button is pressed");
-  }
-}
 
 void loop() 
 {
-  getButtons();
  
-  float r = 5.0;
+  float r = 5.0*s;
   for (int i = 0; i < NUMPIXELS; ++i) 
   {
     float d  = checkCircle(coords[i], x         ,y);
     float d1 = checkCircle(coords[i], x+width/2 ,y);
-    if(d < r*r) {
-      leds[i] = CHSV(c, 255, 100-(d/(r*r))*100*s); //CRGB(r*r - d, 0, 0);
-    } else if(d1 < r*r) {
-      leds[i] = CHSV(c, 255, 100-(d1/(r*r))*100*s); //CRGB(r*r - d, 0, 0);
+    if(d < r) {
+      leds[i] = CHSV(c, 255, (d/r)*100); //CRGB(r*r - d, 0, 0);
+    } else if(d1 < r) {
+      leds[i] = CHSV(c, 255, (d1/r)*100); //CRGB(r*r - d, 0, 0);
     } else {
       leds[i] = CRGB::Black;
     }
   }
 
+  int counter = (int)encoder.getCount();
+  if(counter < 0) {
+    counter = 0;
+    encoder.setCount(counter);
+  } else if(counter > 10) {
+    counter = 10;
+    encoder.setCount(counter);
+  }
+  
+  Serial.println(counter);
+  
   for (int i = 0; i < counter*10; i++) {
     int j = random(0, 600);
     leds[j] = CHSV(random(0, 128), 0, 10);
@@ -189,7 +142,7 @@ void loop()
   y += vy;
   x += vx;
   c = (1.0+sin(t))*128;
-  s = (1.0+sin(t*10));
+  s = (1.0+sin(t*20)) / 2.0;
 
   if (y < 0+4 || y > 17+4) vy = -vy;
   if (x > width) x -= width;
