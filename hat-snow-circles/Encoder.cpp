@@ -11,8 +11,8 @@ Encoder::Encoder(int clk, int dt)
   
   pinMode(clk, INPUT_PULLUP);
   pinMode(dt, INPUT_PULLUP);
-  
-  attachInterrupt(digitalPinToInterrupt(clk), ISR_encoder, RISING);
+
+  attachInterrupt(digitalPinToInterrupt(clk), ISR_encoder, CHANGE);
 }
 
 void IRAM_ATTR Encoder::ISR_encoder() 
@@ -22,15 +22,17 @@ void IRAM_ATTR Encoder::ISR_encoder()
 	
   if (duration >= US_DEBOUNCE) 
   {
-		state.microsLastA = start;
-		state.microsTimeBetweenTicks = duration;
+    // NOTE: we are listening to changes in slk, 
+    // so we know that clk changed at this point
     
-		state.aState = digitalRead(state.clk);
-		state.bState = digitalRead(state.dt);
+    // read new data
+		bool aState = digitalRead(state.clk);
+		bool bState = digitalRead(state.dt);
     
-		if (state.bState == HIGH/*state.bState*/)
+		if (aState == bState) {
 			state.count++;
-		else
+		} else {
 			state.count--;
+		}
 	}
 }
