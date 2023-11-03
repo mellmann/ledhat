@@ -1,3 +1,12 @@
+## FastLED
+
+* https://github.com/FastLED/FastLED
+* http://fastled.io/docs/
+
+
+* https://github.com/FastLED/FastLED/wiki/FastLED-Wave-Functions
+* http://fastled.io/docs/group___beat_generators.html
+
 
 ## encoder
   * https://forum.arduino.cc/t/welche-encoder-library/646692/7
@@ -8,9 +17,11 @@
   * Encoder lib for ESP without interrupts
     - https://github.com/madhephaestus/ESP32Encoder
     
+
 ## ESP32 pinout
-https://circuits4you.com/2018/12/31/esp32-devkit-esp32-wroom-gpio-pinout/
-    
+* https://circuits4you.com/2018/12/31/esp32-devkit-esp32-wroom-gpio-pinout/
+
+
 ## I2C - Qwiic
 
 All Qwiic cables have the following color scheme and arrangement:
