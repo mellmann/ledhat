@@ -1,3 +1,4 @@
+
 // NeoPixel Ring simple sketch (c) 2013 Shae Erisson
 // released under the GPLv3 license to match the rest of the AdaFruit NeoPixel library
 
@@ -50,11 +51,14 @@ uint16_t XY( uint8_t x, uint8_t y)
 
 void setup() 
 {  
+
+  // initialize the matrix values
   for(int i = 0; i < NUM_LEDS; ++i) {
     XYTable[i] = (i % 2 == 0) ? i / 2 : LAST_VISIBLE_LED;
   }
   
-  encoder.attachFullQuad ( DT_PIN, CLK_PIN );
+  //encoder.attachFullQuad ( DT_PIN, CLK_PIN );
+  encoder.attachSingleEdge ( DT_PIN, CLK_PIN );
   encoder.setCount ( 0 );
   
   Serial.begin(115200);
@@ -121,7 +125,7 @@ void Fire2012()
 
 void loop() 
 {
-  counter = (int) (encoder.getCount() / 4);
+  counter = encoder.getCount();
   if(counter < 0) {
     counter = 0;
     encoder.setCount(counter);
