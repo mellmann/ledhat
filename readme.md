@@ -35,3 +35,9 @@ ESP32
 
 * D22 (GPIO22) = SCL
 * D21 (GPIO21) = SDA
+
+
+## Experiments with Text: hat-matrix-text
+
+* https://github.com/AaronLiddiment/LEDMatrix/tree/master
+* https://github.com/AaronLiddiment/LEDText
