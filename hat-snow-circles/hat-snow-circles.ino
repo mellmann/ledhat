@@ -43,32 +43,8 @@ struct Point {
 Point coords[NUMPIXELS];
 
 
-
-void setup() 
+void calculate_coords() 
 {  
-  //encoder.attachFullQuad ( DT_PIN, CLK_PIN );
-  //encoder.setCount ( 0 );
-  
-  Serial.begin(115200);
-
-  Serial.write("Initializing IMU...");
-  if(!bno.begin()) {
-      Serial.write("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
-  } else {
-    Serial.write("BNO055 connected!");
-    delay(1000); // FIXME: ist das nötig?
-    bno.setExtCrystalUse(true);
-  }
-  
-
-  button.setDebounceTime(50);  // set debounce time to 50 milliseconds
-
-    
-  FastLED.addLeds<WS2812B, DATAPIN, GRB>(leds, NUMPIXELS);
-  FastLED.setBrightness(255);
-  FastLED.setDither(0);
-  
-
   float h = 0;
   float a = 0;
   coords[0].h = h;
@@ -87,16 +63,52 @@ void setup()
   }
 }
 
-int idx = 0;
-float t = 0.0;
-float x = 8.0;
-float y = 8.0;
-float c = 0.0;
+void setup() 
+{  
+  //encoder.attachFullQuad ( DT_PIN, CLK_PIN );
+  //encoder.setCount ( 0 );
+  
+  Serial.begin(115200);
 
-float vx = 0.8;
-float vy = 0.1;
+  Serial.write("Initializing IMU...");
+  if(!bno.begin()) {
+      Serial.write("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
+  } else {
+    Serial.write("BNO055 connected!");
+    delay(1000); // FIXME: ist das nötig?
+    bno.setExtCrystalUse(true);
+  }
+  
+  button.setDebounceTime(50);  // set debounce time to 50 milliseconds
 
-float s = 0;
+  FastLED.addLeds<WS2812B, DATAPIN, GRB>(leds, NUMPIXELS);
+  FastLED.setBrightness(255);
+  FastLED.setDither(0);
+
+  calculate_coords();
+}
+
+
+float last_angle = 0;
+float angle_diff = 0; // angle movement since last update
+
+void calculate_angle() 
+{
+  // calculate angle
+  imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
+
+  float new_angle = euler.x();
+  angle_diff = new_angle - last_angle;
+  if(angle_diff > 180) {
+    angle_diff -= 360;
+  } else if(angle_diff < -180) {
+    angle_diff += 360;
+  }
+
+  last_angle = new_angle;
+  Serial.println(last_angle);
+}
+
 
 float checkCircle(const Point& c, float x, float y) 
 {
@@ -113,24 +125,21 @@ float checkCircle(const Point& c, float x, float y)
   return sqrt(d);
 }
 
-float last_angle = 0;
 
-void loop() 
+
+float t = 0.0;
+float x = 8.0;
+float y = 8.0;
+float c = 0.0;
+
+float vx = 0.8;
+float vy = 0.1;
+
+float s = 0;
+
+
+void draw_circles() 
 {
-  imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-
-  float new_angle = euler.x();
-  float angle_diff = new_angle - last_angle;
-  if(angle_diff > 180) {
-    angle_diff -= 360;
-  } else if(angle_diff < -180) {
-    angle_diff += 360;
-  }
-
-  last_angle = new_angle;
-  Serial.println(last_angle);
-  
- 
   float r = 5.0*s;
   for (int i = 0; i < NUMPIXELS; ++i) 
   {
@@ -144,7 +153,54 @@ void loop()
       leds[i] = CRGB::Black;
     }
   }
+}
 
+void draw_snow(int count) 
+{
+  for (int i = 0; i < count; i++) {
+    int j = random(0, 600);
+    leds[j] = CHSV(random(0, 128), 0, 10);
+  }
+}
+
+void imu_circles() 
+{
+  t += 0.02;
+  
+  //y = 7.0;
+  x += angle_diff / 360.0 * width;
+  
+  c = (1.0+sin(t))*128;
+  s = 1.0; //(1.0+sin(t*20)) / 2.0;
+
+  // wrap x coordinates
+  if (x > width)  x -= width;
+  if (x < -width) x += width;
+}
+
+void bouncing_circles() 
+{
+  t += 0.02;
+  
+  y += vy;
+  x += vx;
+  
+  c = (1.0+sin(t))*128;
+  s = 1.0; //(1.0+sin(t*20)) / 2.0;
+
+  if (y < 0+4 || y > 17+4) vy = -vy;
+
+  // wrap x coordinates
+  if (x > width)  x -= width;
+  if (x < -width) x += width;
+}
+
+
+void loop() 
+{
+  button.loop();
+  calculate_angle();
+  
   int counter = (int)encoder.getCount();
   if(counter < 0) {
     counter = 0;
@@ -153,34 +209,18 @@ void loop()
     counter = 10;
     encoder.setCount(counter);
   }
-  
   //Serial.println(counter);
-  
-  for (int i = 0; i < counter*10; i++) {
-    int j = random(0, 600);
-    leds[j] = CHSV(random(0, 128), 0, 10);
+
+  int state = button.getCount() % 2;
+
+  switch(state) {
+    case 0: imu_circles(); break;
+    case 1: bouncing_circles(); break;
   }
-
-  // (5.0*5.0 - d)*10
-  //c-(5.0*5.0 - d)*5
+  
+  draw_circles();
+  draw_snow(counter*10);
+  
   FastLED.show();
-  
-  //idx = (idx + 1) % 36;
-
-  t += 0.02;
-  //y = 3.0 * sin(t) + 8.0;
-  //x = 3.0 * cos(t) + 8.0;
-  
-  //y += vy;
-  //x += vx;
-  x += angle_diff / 360.0 * width;
-  
-  c = (1.0+sin(t))*128;
-  s = 1.0; //(1.0+sin(t*20)) / 2.0;
-
-  if (y < 0+4 || y > 17+4) vy = -vy;
-  if (x > width) x -= width;
-  if (x < -width) x += width;
-  
   FastLED.delay(10);
 }
