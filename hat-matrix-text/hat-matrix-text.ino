@@ -45,28 +45,28 @@ const unsigned char PlasmaTxt[] = { EFFECT_BACKGND_LEAVE EFFECT_RGB "\xff\xff\xf
                                     EFFECT_BACKGND_ERASE EFFECT_COLR_EMPTY "     F-PLASMA " EFFECT_DELAY_FRAMES "\x01\x2c" "     "
                                     EFFECT_BACKGND_ERASE EFFECT_COLR_DIMMING "\x40" "     F-PLASMA " EFFECT_DELAY_FRAMES "\x01\x2c" "     " };
 
-
-const unsigned char TxtRainbowL[] = { EFFECT_SCROLL_LEFT "     " EFFECT_HSV "\x00\xff\xff" "H" EFFECT_HSV "\x20\xff\xff" "+" EFFECT_HSV "\x40\xff\xff" "V" EFFECT_HSV "\x60\xff\xff" "=" EFFECT_HSV "\x80\xff\xff" "<3"};
-
+// EFFECT_SCROLL_LEFT "     " 
+const unsigned char TxtRainbowL[] = { EFFECT_HSV "\x00\xff\xff" "H" EFFECT_HSV "\x20\xff\xff" "+" EFFECT_HSV "\x40\xff\xff" "V" EFFECT_HSV "\x60\xff\xff" "=" EFFECT_HSV "\x80\xff\xff" "<3"};
 
 
 // Here's how to control the LEDs from any two pins:
 #define DATAPIN    13
+#define NUMPIXELS 600 // Number of LEDs in strip
+
+CRGB leds[ NUMPIXELS ];
+
+
+
 
 const uint8_t kMatrixWidth = 69;
 const uint8_t kMatrixHeight = 18;
-#define NUM_LEDS (kMatrixWidth * kMatrixHeight)
-#define LAST_VISIBLE_LED 1000
-
-CRGB leds[ NUM_LEDS ];
-
-uint16_t XYTable[NUM_LEDS];
+uint16_t XYTable[kMatrixWidth * kMatrixHeight];
 
 uint16_t XY( uint8_t x, uint8_t y)
 {
   // any out of bounds address maps to the first hidden pixel
   if ( (x >= kMatrixWidth) || (y >= kMatrixHeight) ) {
-    return (LAST_VISIBLE_LED + 1);
+    return NUMPIXELS;
   }
 
   uint16_t i = (y * kMatrixWidth) + x;
@@ -75,20 +75,24 @@ uint16_t XY( uint8_t x, uint8_t y)
 }
 
 
+
+
 void setup() 
 {  
-
+  Serial.begin(115200);
+  
   // initialize the matrix values
-  for(int i = 0; i < NUM_LEDS; ++i) {
-    XYTable[i] = (i % 2 == 0) ? i / 2 : LAST_VISIBLE_LED;
+  for(int i = 0; i < kMatrixWidth * kMatrixHeight; ++i) {
+    XYTable[i] = (i % 2 == 0) ? i / 2 : NUMPIXELS;
   }
   
   //encoder.attachFullQuad ( DT_PIN, CLK_PIN );
   encoder.attachSingleEdge ( DT_PIN, CLK_PIN );
   encoder.setCount ( 0 );
 
+  button.setDebounceTime(50);  // set debounce time to 50 milliseconds
+
   
-  Serial.begin(115200);
 
   Serial.println("Initializing IMU...");
   if(!bno.begin()) {
@@ -100,9 +104,9 @@ void setup()
   }
   
 
-  button.setDebounceTime(50);  // set debounce time to 50 milliseconds
+  
 
-  FastLED.addLeds<WS2812B, DATAPIN, GRB>(leds, NUM_LEDS);
+  FastLED.addLeds<WS2812B, DATAPIN, GRB>(leds, NUMPIXELS);
   FastLED.setBrightness(64);
   FastLED.setDither(0);
 
@@ -112,9 +116,11 @@ void setup()
   ScrollingMsg.Init(&ledsm, ledsm.Width(), ScrollingMsg.FontHeight() + 1, 0, 5);
   ScrollingMsg.SetText((unsigned char *)TxtRainbowL, sizeof(TxtRainbowL) - 1);
   ScrollingMsg.SetTextColrOptions(COLR_RGB | COLR_SINGLE, 0xff, 0x00, 0xff);
+  ScrollingMsg.UpdateText();
 }
 
 int counter = 0;
+int x_offset = 0;
 
 void loop() 
 {
@@ -126,19 +132,26 @@ void loop()
     counter = kMatrixHeight;
     encoder.setCount(counter);
   }
-  Serial.println((int)counter);
+  //Serial.println((int)counter);
 
-  //FastLED.clear();
+  FastLED.clear();
 
-  if (ScrollingMsg.UpdateText() == -1)
-    ScrollingMsg.SetText((unsigned char *)TxtRainbowL, sizeof(TxtRainbowL) - 1);
+  //if (ScrollingMsg.UpdateText() == -1)
+  //  ScrollingMsg.SetText((unsigned char *)TxtRainbowL, sizeof(TxtRainbowL) - 1);
 
   // copy data
   for( int x = 0; x < kMatrixWidth; ++x) {
     for( int y = 0; y < kMatrixHeight; ++y) {
-      leds[XY(x, (kMatrixHeight-1) - y)] = ledsm(x,y);
+      // set the led if the index is valid
+      uint16_t idx = XY((x + x_offset) % kMatrixWidth, (kMatrixHeight-1) - y);
+      if(idx < NUMPIXELS) {
+        leds[idx] = ledsm(x,y);
+      }
     }
   }
+
+  x_offset = (x_offset-1) % kMatrixWidth;
+  Serial.println(x_offset);
 
   FastLED.show();
   FastLED.delay(25);
