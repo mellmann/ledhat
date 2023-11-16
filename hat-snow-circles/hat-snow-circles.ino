@@ -32,7 +32,6 @@ const float px_dist = 1.6;
 const float px_per_cm = 34.5;
 const float width = px_per_cm*px_dist;
 
-
 CRGB leds[NUMPIXELS];
 
 struct Point {
