@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 #include <ezButton.h>  // the library to use for SW pin
-#include "Encoder.h"
+//#include "Encoder.h"
 #include <ESP32Encoder.h>
 
 #include <Adafruit_BNO055.h>
@@ -13,8 +13,8 @@
 #define DT_PIN  18 // ESP32 pin GPIO26 connected to the rotary encoder's DT pin
 #define SW_PIN  19 // ESP32 pin GPIO27 connected to the rotary encoder's SW pin
 
-Encoder encoder(DT_PIN, CLK_PIN);
-//ESP32Encoder encoder;
+//Encoder encoder(DT_PIN, CLK_PIN);
+ESP32Encoder encoder;
 
 
 ezButton button(SW_PIN);
@@ -64,11 +64,12 @@ void calculate_coords()
 
 void setup() 
 {  
-  //encoder.attachFullQuad ( DT_PIN, CLK_PIN );
-  //encoder.setCount ( 0 );
-  
   Serial.begin(115200);
-
+  
+  //encoder.attachFullQuad ( DT_PIN, CLK_PIN );
+  encoder.attachSingleEdge ( DT_PIN, CLK_PIN );
+  encoder.setCount ( 0 );
+  
   Serial.write("Initializing IMU...");
   if(!bno.begin()) {
       Serial.write("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
