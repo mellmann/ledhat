@@ -30,22 +30,12 @@ Adafruit_BNO055 bno;
 #include "FontRobotron.h"
 #include "FontMatrise.h"
 
-
 #define MATRIX_WIDTH   69
 #define MATRIX_HEIGHT  18
 #define MATRIX_TYPE    HORIZONTAL_ZIGZAG_MATRIX
 
 cLEDMatrix<MATRIX_WIDTH, MATRIX_HEIGHT, MATRIX_TYPE> ledsm;
-
 cLEDText ScrollingMsg;
-
-const unsigned char PlasmaTxt[] = { EFFECT_BACKGND_LEAVE EFFECT_RGB "\xff\xff\xff" "         F-PLASMA " EFFECT_DELAY_FRAMES "\x01\x2c" "         "
-                                    EFFECT_BACKGND_DIMMING "\x40" EFFECT_RGB "\xff\xff\xff" "         F-PLASMA " EFFECT_DELAY_FRAMES "\x01\x2c" "         "
-                                    EFFECT_BACKGND_LEAVE EFFECT_COLR_DIMMING "\x10" "         F-PLASMA " EFFECT_DELAY_FRAMES "\x01\x2c" "         "
-                                    EFFECT_BACKGND_ERASE EFFECT_COLR_EMPTY "     F-PLASMA " EFFECT_DELAY_FRAMES "\x01\x2c" "     "
-                                    EFFECT_BACKGND_ERASE EFFECT_COLR_DIMMING "\x40" "     F-PLASMA " EFFECT_DELAY_FRAMES "\x01\x2c" "     " };
-
-// EFFECT_SCROLL_LEFT "     " 
 const unsigned char TxtRainbowL[] = { EFFECT_HSV "\x00\xff\xff" "H" EFFECT_HSV "\x20\xff\xff" "+" EFFECT_HSV "\x40\xff\xff" "V" EFFECT_HSV "\x60\xff\xff" "=" EFFECT_HSV "\x80\xff\xff" "<3"};
 
 
@@ -104,12 +94,9 @@ void setup()
   }
   
 
-  
-
   FastLED.addLeds<WS2812B, DATAPIN, GRB>(leds, NUMPIXELS);
   FastLED.setBrightness(64);
   FastLED.setDither(0);
-
 
   ScrollingMsg.SetFont(RobotronFontData);
   //ScrollingMsg.SetFont(MatriseFontData);
@@ -150,7 +137,11 @@ void loop()
     }
   }
 
-  x_offset = (x_offset-1) % kMatrixWidth;
+  x_offset = x_offset-1;
+  if (x_offset < 0) { 
+    x_offset += kMatrixWidth;
+  }
+  
   Serial.println(x_offset);
 
   FastLED.show();
