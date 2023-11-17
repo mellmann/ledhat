@@ -116,8 +116,11 @@ void Fire2012()
     // Step 4.  Map from heat cells to LED colors
     for( int x = 0; x < kMatrixWidth; ++x) {
       for( int y = 0; y < kMatrixHeight; ++y) {
-        CRGB color = HeatColor( heat[x][y]);
-        leds[XY(x, (kMatrixHeight-1) - y)] = color;
+        uint16_t idx = XY(x, (kMatrixHeight-1) - y);
+        if(idx < NUMPIXELS) {
+          CRGB color = HeatColor( heat[x][y]);
+          leds[idx] = color;
+        }
       }
     }
 }
