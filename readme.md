@@ -48,6 +48,8 @@ ESP32
 
 <img src="https://lh3.googleusercontent.com/pw/ADCreHfrVLDxCRrICNs6UQuouvNY9oMEWXDiUrE2D4skc9rTQ5IC_wvddIzHGY8p4KDU9XmRRWiNYvo6nHTUOvabbOF7WyD-LuK6MgM2legNXjF_DcErJCZayAgSaGYW1kIoFGAwaCjFJiXjEuWMNNmn_nS3jw=w710-h947-s-no?authuser=0" />
 
+
+<div style="width:100%" align="center">
 <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHc2uwFti-HHfWGZL_4EAkNEVXGqiLB--LpI8ELuHkW_KawySUs1pxXyy-zmuw3aZHJwyMVWu84uHRFHohnPETSJfLSid3xHcu20f75cARQuxzp1sjTl=w1920-h1080"/>
 <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHe_ldGwhuf_IU3pOQTemf_WnuLrRbIFwgyxRAYmTTrosRSLR1sfp7nAIH6bkNeMZIX6_Q6K-nEEzFDr-k_702X0A43WsFbOjQ31NZ5smOaU4YgiJ7Si=w1920-h1080"/>
 <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHfVgNQCPtGiHx1sabymVAZEBP6mudMlVOjPUSw8zFCt5-12BnOEF60aU8Ec2rPi8YB6S1sDtJGGivmi5TDMRpi__YeHjeJtK5Gg0Z_zrFAQMMMGe-kF=w1920-h1080"/>
@@ -72,8 +74,5 @@ ESP32
 <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHdzfPscUQi9KVHB9uMlhJls6GAy8AwF5PiUDW74Dy36TeeB-AgWiAYJATWdw6NrsFKKQbs3lA8lpveIvXf6ulqT9K4HtaYR8z8zGqdXtuwOSRkmk9LY=w1920-h1080"/>
 <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHdHxQcshevDCa4B6m_RmgJLek2rO4X1DgLxv3qm_U_Bq8Iwkyw6hwxtkqdOrpI2EMxZCVhELa8zEdmJ_PkrVPW4AkU3ZISCRuqfQEKIOytTd_kA0x6t=w1920-h1080"/>
 <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHdhUz6O3uC9NvF9Ywylx8VCAOfq4hIF13V3MV_PrJCzDpGM6s-y_kH-ElXlsKJY9Zns6gz4e-zKHU6CAe333b6EIUuJJnEnaPKiQXdZXzBm6YyxxB6u=w1920-h1080"/>
+</div>
 
-
-
-
-</a>
