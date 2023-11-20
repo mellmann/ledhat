@@ -1,53 +1,25 @@
-## FastLED
+# Light_Hat [Magic Hat]
 
-* https://github.com/FastLED/FastLED
-* http://fastled.io/docs/
+A top hat somewhat inspired from steampunk (or maybe more 'steam funk'?) is equipped with a hexagonal array of led lights and regulator knob. The hat is controlled by an embedded computer which can be equipped with a variety of sensors and is able to connect to the internet.
 
+The hat is able to interact with the person who wears it, with the digital space and, with the surrounding environment.
+It can provide an object for social interactions.
 
-* https://github.com/FastLED/FastLED/wiki/FastLED-Wave-Functions
-* http://fastled.io/docs/group___beat_generators.html
+It can display pretty animations, text and play video games (last one is in progress). But maybe it can be used as an object to discuss and approach more serious and critical questions in a fun and easy way. 
 
+A couple ideas could be:
 
-## encoder
-  * https://forum.arduino.cc/t/welche-encoder-library/646692/7
-  * https://github.com/MajicDesigns/MD_REncoder/tree/main
-  * https://github.com/buxtronix/arduino/tree/master/libraries/Rotary
-  * seems to have problems with ESP32
-    - https://github.com/PaulStoffregen/Encoder
-  * Encoder lib for ESP without interrupts
-    - https://github.com/madhephaestus/ESP32Encoder
-    
+- post your social media updates on your hat for everyone to see - who knows, maybe it can bring the digital space into the real space?
 
-## ESP32 pinout
-* https://circuits4you.com/2018/12/31/esp32-devkit-esp32-wroom-gpio-pinout/
+- sell time on your hat to advertisers - imagine an advertisement of your favorite drink being shown every time you drink it.
+
+- social display - display your social energy level and other relevant stats on your hat, so that others can give you space when needed <-- good for nerds who want to socialize, but don't know how.
 
 
-## I2C - Qwiic
+## Images
 
-All Qwiic cables have the following color scheme and arrangement:
-
-  * Black = GND
-  * Red = 3.3V
-  * Blue = SDA
-  * Yellow = SCL
-  
-ESP32
-
-* D22 (GPIO22) = SCL
-* D21 (GPIO21) = SDA
-
-
-## Experiments with Text: hat-matrix-text
-
-* https://github.com/AaronLiddiment/LEDMatrix/tree/master
-* https://github.com/AaronLiddiment/LEDText
-
-# Images
-
+Images and videos can be found here: 
 <https://photos.app.goo.gl/qExnNvVooQyz23A26>
-
-<img src="https://lh3.googleusercontent.com/pw/ADCreHfrVLDxCRrICNs6UQuouvNY9oMEWXDiUrE2D4skc9rTQ5IC_wvddIzHGY8p4KDU9XmRRWiNYvo6nHTUOvabbOF7WyD-LuK6MgM2legNXjF_DcErJCZayAgSaGYW1kIoFGAwaCjFJiXjEuWMNNmn_nS3jw=w710-h947-s-no?authuser=0" />
-
 
 <div style="width:100%" align="center">
 <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHc2uwFti-HHfWGZL_4EAkNEVXGqiLB--LpI8ELuHkW_KawySUs1pxXyy-zmuw3aZHJwyMVWu84uHRFHohnPETSJfLSid3xHcu20f75cARQuxzp1sjTl=w1920-h1080"/>
@@ -75,4 +47,53 @@ ESP32
 <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHdHxQcshevDCa4B6m_RmgJLek2rO4X1DgLxv3qm_U_Bq8Iwkyw6hwxtkqdOrpI2EMxZCVhELa8zEdmJ_PkrVPW4AkU3ZISCRuqfQEKIOytTd_kA0x6t=w1920-h1080"/>
 <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHdhUz6O3uC9NvF9Ywylx8VCAOfq4hIF13V3MV_PrJCzDpGM6s-y_kH-ElXlsKJY9Zns6gz4e-zKHU6CAe333b6EIUuJJnEnaPKiQXdZXzBm6YyxxB6u=w1920-h1080"/>
 </div>
+
+
+
+
+
+# Used Libraries and Code
+
+## FastLED
+
+* https://github.com/FastLED/FastLED
+* http://fastled.io/docs/
+
+* https://github.com/FastLED/FastLED/wiki/FastLED-Wave-Functions
+* http://fastled.io/docs/group___beat_generators.html
+
+
+## Encoder
+  * https://forum.arduino.cc/t/welche-encoder-library/646692/7
+  * https://github.com/MajicDesigns/MD_REncoder/tree/main
+  * https://github.com/buxtronix/arduino/tree/master/libraries/Rotary
+  * seems to have problems with ESP32
+    - https://github.com/PaulStoffregen/Encoder
+  * Encoder lib for ESP without interrupts
+    - https://github.com/madhephaestus/ESP32Encoder
+    
+
+## ESP32 pinout
+* https://circuits4you.com/2018/12/31/esp32-devkit-esp32-wroom-gpio-pinout/
+
+
+## I2C - Qwiic
+
+All Qwiic cables have the following color scheme and arrangement:
+
+* Black = GND
+* Red = 3.3V
+* Blue = SDA
+* Yellow = SCL
+  
+### ESP32
+
+* D22 (GPIO22) = SCL
+* D21 (GPIO21) = SDA
+
+
+## Experiments with Text: hat-matrix-text
+
+* https://github.com/AaronLiddiment/LEDMatrix/tree/master
+* https://github.com/AaronLiddiment/LEDText
 
