@@ -12,7 +12,10 @@
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHekdnwGE9NtBSuamBa24VLm51WI1AEiMtc6jo7VYUfDqumgn0DrS8zW8gZM11GTmGTuDmf5lSBZsUfr3uf5YtYXskWZNckmgZtv99i60gYsZd7frnC3=w640-h480"/>
 </div>
 
-# Light_Hat [:octocat: Code](https://github.com/mellmann/light_hat)
+
+[:octocat: Code](https://github.com/mellmann/light_hat)
+
+# Light_Hat [Magic Hat]
 
 A top hat somewhat inspired from steampunk (or maybe more 'steam funk'?) is equipped with a hexagonal array of led lights and regulator knob. The hat is controlled by an embedded computer which can be equipped with a variety of sensors and is able to connect to the internet.
 
