@@ -35,25 +35,29 @@ A couple ideas could be:
 
 ## Images
 
-Images and videos can be found here: 
+Images and videos can be found here:   
 <https://photos.app.goo.gl/qExnNvVooQyz23A26>
 
+### Construction
 <div style="width:100%" align="center">
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHcBNb3ZpkJjER51kCqTgobzNKmSFvV2NUBQj6ESlktfNcnKoxf1TEXdzbcIwYt82Vn1khapHCIW7kudpCako4rM_wjieSzzSqrgpyw10ccwHJMjONIq=w640-h480"/>
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHcsnFpNOE0LGxrt0bmgBte6KK7_FPsU_R183xvLzNSbXGuuJMd8ywozccwPEJZjyOs2fevyQ4hPU-sN_zIbAMOJfhPjvmSxv61vlFXcXunDFLhhScZL=w640-h480"/>
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHegGdmqquj1oCKjgqB7fAXxGN2z1i9zwohxomZOVCNm7ubjl7ogkvz7EXEV_Wd0Id3Hetupw7076q0zkx-zjJWqrua9OdPfoG19dd9KVT0tufjR7c0Z=w640-h480"/>
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHdPiL7cpDsqtcEsoeyL-N-lFB0m71YNZVZ0ajyZ1tf2vgNQVYZKC665L5xetIVCP0v9ZY01vvzKHmed9vSQrOMIXI6Wigs1AeRi2deXrUX8j80GjcC9=w640-h480"/>
+  
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHcucLJlGOt1A9wFesCwAqnKh6TFKFi-_j5bBW0bBtg6BzQnX49Skya1FwMnCD0Sc3HCOz4K2eEHl7QfmFtT3k3YUywzITB9eSM1KQtMFv-MuRfJZCq5=w640-h480"/>
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHf3rBf6KbW3SOuJ7y6xgR5o0T0UFZ7FrQRysfkMFfphAO_B2TiEKetwqFpi5vrYBUWXXhoG8feJKzBj2hBpq-92hwr21Mf6N2Z1tUgyfIn8i5m79pxk=w640-h480"/>
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHex36pghKGyj4oeDXUFYoilM--GTAoFGbQYlJuJVsWxSS1wj8tKoUrWlabTvx5oCgEdirV-uwhwlLAYpBmeQvSVLZQ9g9Qoj4bQ1fEFlRWizr2COu-F=w640-h480"/>
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHfAEwkQ0sT-bdoZryR3wvlsulA7VU3tKFtMuSm2gzIrfVV3O2NOpe9hoVAEek4k1bI057kBL3Bp9m1DJRSJ44If5CgKvFXQ13LPJvsF3XrFMKhnZMwA=w640-h480"/>
+  
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHdWQ7QdNLdTXJY8AhVOOgKypcsZp4nxR8NR1GnGMx7e2RFRaK2-F88-gme2nxJQ1Ab-vdcdXlsSdMqcC1Ep7H8MLl7CncTosEaBe4-tY7RDccfSO8JK=w640-h480"/>
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHcPPtmseJiYfHGbKoDMvZycjmQP4umoC91VL8d6QiHyP_Bc_HU8UMTvGhpRGWhrnWY7XGFW2qCiUCmgKT8KFQKoPJ_6JFXNP4YZrhEC5q9x_rnNZoGM=w640-h480"/>
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHfpW-7FWfQ3dQrYpfLo_A4iE1eZRU8eYwmc4T44NIc4VnzgCGP4D8xMTKToDt865G4wh6hQZVjK9eq7EaDxKWR7l4unJ7fZPPsHY5TaSzubIjdZssoe=w640-h480"/>
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHcCga8_YtRzcLK-mTeq7QjosP9RbOiEdnpw2-R6rr2aDrY7QNOeTIz6hSnaI08yZuFqdLSIgsT2mBsQm4pd5N2MACk9O84-IiYD6EMYkn2xi6qjQtLB=w640-h480"/>
-  <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHe_ldGwhuf_IU3pOQTemf_WnuLrRbIFwgyxRAYmTTrosRSLR1sfp7nAIH6bkNeMZIX6_Q6K-nEEzFDr-k_702X0A43WsFbOjQ31NZ5smOaU4YgiJ7Si=w640-h480"/>
-  <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHc2uwFti-HHfWGZL_4EAkNEVXGqiLB--LpI8ELuHkW_KawySUs1pxXyy-zmuw3aZHJwyMVWu84uHRFHohnPETSJfLSid3xHcu20f75cARQuxzp1sjTl=w640-h480"/>
-  <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHfVgNQCPtGiHx1sabymVAZEBP6mudMlVOjPUSw8zFCt5-12BnOEF60aU8Ec2rPi8YB6S1sDtJGGivmi5TDMRpi__YeHjeJtK5Gg0Z_zrFAQMMMGe-kF=w640-h480"/>
+</div>
+
+### Examples for Animations
+<div style="width:100%" align="center">
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHdmDeyOf4DEGphBQweSlXuzM7lQDVeypGR5MKkkoUSAT5jCb1LckzNsWxHb7YtX-eY1klKevWPyQiLP3aZ3xvc9abwdp5jcXo6lmhOEKkyWGT9DhYm3=w640-h480"/>
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHc-NmptiTBKhB6-vMP3IJWSR1P79TwI4QCuKQodX5zGheMP4tVMfe2OerDia_jPiSugWRi9Rm5-AfdwCV3C6pltKYe9K77tVVq2V2LtsLTMKojp-IPv=w640-h480"/>
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHdmK8idvXiEBsFragirg8w85VkRV3LSW02F11kef2OEndYQmNCfAGC9TkFZPw6KncFMRXYvakASpZ_sTVj6Psi4m4xFmBBb-tNf2PbIQWOCzMmye_fx=w640-h480"/>
@@ -65,9 +69,6 @@ Images and videos can be found here:
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHeeNbtwWEPFtXYc8f3lmYQ2bWuLoCzXP5-K6JgejqML-vgasYdO9PW0HZ9x_a4FRehO49tZv6qPz5QQiRo8hj6B8lz1mHjnT_Me2CKb5o3Ml0Kk_UZH=w640-h480"/>
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHekdnwGE9NtBSuamBa24VLm51WI1AEiMtc6jo7VYUfDqumgn0DrS8zW8gZM11GTmGTuDmf5lSBZsUfr3uf5YtYXskWZNckmgZtv99i60gYsZd7frnC3=w640-h480"/>
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHeoT1Ei6HK-7bUR4KZF8ofrhaLk2k1ni0Pz9J6Sa5SJbu5wJFUFuM_dGQB1etHG4uilqMVbn6eD9Secv5SIXbfrr3Or1XjuPbKYaLq4C-pXf6oFbubO=w640-h480"/>
-
-
-
 
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHeP5u2PIoyVtcR4Pg_WGAeaGY0vhdZDdeEsQZD2GQKUrAedWY27Um0igD8gNnvAOvvEXs8w8sN7FoZHMM8vbKhIiitYHsVp_KD11ox0UGMxnKeCzdgK=w640-h480"/>
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHdzlfAEBNsDpDGQd2yDk1kpf21Fks8hLyqxWdwYspx0NpN7GNomLFIIQT1jDInQpq0vxs9glaqJ8ezg1s0bYGKjYBih_RCTEYo6MIepHPN2YANJFlYk=w640-h480"/>
