@@ -22,7 +22,7 @@ public:
   {
     // initialize the mapping of the matrix values to the led strip
     for(int i = 0; i < WIDTH * HEIGHT; ++i) {
-      xy2idx[i] = (i % 2 == 0) ? min(i / 2, NUM_PIXELS) : NUM_PIXELS;
+      xy2idx[i] = (i % 2 == 0) ? min((NUM_PIXELS - 1) - i / 2, NUM_PIXELS) : NUM_PIXELS;
     }
   }
 

@@ -46,7 +46,7 @@ public:
         //matrix.pixel(x, (matrix.height()-1) - y) = HeatColor( heat[x][y]); // 
 
         uint8_t colorindex = scale8( heat[x][y], 240);
-        matrix.pixel(x, (matrix.height()-1) - y) = ColorFromPalette(color_palette, colorindex);
+        matrix.pixel(x, y) = ColorFromPalette(color_palette, colorindex);
       }
     }
   }
