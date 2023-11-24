@@ -126,7 +126,7 @@ void loop()
   button.loop();
   calculate_angle();
   
-  int counter = getEncoder() ;
+  int counter = getEncoder();
 
   int state = button.getCount() % 2;
 
