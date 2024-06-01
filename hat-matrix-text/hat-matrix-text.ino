@@ -4,6 +4,9 @@
 
 #include <Arduino.h>
 
+#include <Adafruit_GFX.h>
+#include "HatMatrix.h"
+
 #include <ezButton.h>  // the library to use for SW pin
 #include "Encoder.h"
 #include <ESP32Encoder.h>
@@ -23,59 +26,114 @@ ezButton button(SW_PIN);
 Adafruit_BNO055 bno;
 
 #include <FastLED.h>
+// Here's how to control the LEDs from any two pins:
+#define DATAPIN    13
 
 
 #include "LEDMatrix.h"
+
 #include "LEDText.h"
 #include "FontRobotron.h"
 #include "FontMatrise.h"
+#include "FontAtari.h"
 
+#include "Ball.h"
+#include "Fire.h"
+
+#define NUMPIXELS 600 // Number of LEDs in strip
 #define MATRIX_WIDTH   69
 #define MATRIX_HEIGHT  18
 #define MATRIX_TYPE    HORIZONTAL_ZIGZAG_MATRIX
+
 
 cLEDMatrix<MATRIX_WIDTH, MATRIX_HEIGHT, MATRIX_TYPE> ledsm;
 cLEDText ScrollingMsg;
 const unsigned char TxtRainbowL[] = { EFFECT_HSV "\x00\xff\xff" "H" EFFECT_HSV "\x20\xff\xff" "+" EFFECT_HSV "\x40\xff\xff" "V" EFFECT_HSV "\x60\xff\xff" "=" EFFECT_HSV "\x80\xff\xff" "<3"};
 
 
-// Here's how to control the LEDs from any two pins:
-#define DATAPIN    13
-#define NUMPIXELS 600 // Number of LEDs in strip
-
-CRGB leds[ NUMPIXELS ];
-
-
-
-
-const uint8_t kMatrixWidth = 69;
-const uint8_t kMatrixHeight = 18;
-uint16_t XYTable[kMatrixWidth * kMatrixHeight];
-
-uint16_t XY( uint8_t x, uint8_t y)
+class GFXTest : public GFXcanvas1 
 {
-  // any out of bounds address maps to the first hidden pixel
-  if ( (x >= kMatrixWidth) || (y >= kMatrixHeight) ) {
-    return NUMPIXELS;
+public:
+ HatMatrix<NUMPIXELS, MATRIX_WIDTH, MATRIX_HEIGHT> hatMatrix;
+
+public:
+  GFXTest()
+    : GFXcanvas1(MATRIX_WIDTH, MATRIX_HEIGHT) 
+  {
   }
 
-  uint16_t i = (y * kMatrixWidth) + x;
-  uint16_t j = XYTable[i];
-  return j;
-}
+  void print(bool rotated) 
+  {
+    Serial.println("print");
+    char pixel_buffer[8];
+    uint16_t width, height;
+  
+    if (rotated) {
+      width = this->width();
+      height = this->height();
+    } else {
+      width = this->WIDTH;
+      height = this->HEIGHT;
+    }
+  
+    for (uint16_t y = 0; y < height; y++) {
+      for (uint16_t x = 0; x < width; x++) {
+        bool pixel;
+        if (rotated) {
+          pixel = this->getPixel(x, y);
+        } else {
+          pixel = this->getRawPixel(x, y);
+        }
+        //sprintf(pixel_buffer, " %d", pixel);
+        //Serial.print(pixel_buffer);
+        if(pixel) {
+          hatMatrix.pixel(x,y) = CRGB::Red;
+        } else {
+          hatMatrix.pixel(x,y) = CRGB::Black;
+        }
+      }
+    }
+  }
+};
 
+
+GFXTest gfx;
+
+
+
+// dimensions of the hat matrix
+// NOTE: The distance between the LEDs on the LED-strip is 16 mm.
+//   The lines are placed with an offes of half a distance between the LEDs.
+//   Between the LES we consider to be 'invisible' pixel.
+//   This leads to the following matrix of pixels, with a horizontal distance of 8mm between the pixels
+//     - LED-pixels:       [O]
+//     - invisible pixels: [ ]
+//       
+//   [O][ ][O][ ][O][ ][O][ ]
+//   [ ][O][ ][O][ ][O][ ][O]
+//   [O][ ][O][ ][O][ ][O][ ]
+//   [ ][O][ ][O][ ][O][ ][O]
+//   [O][ ][O][ ][O][ ][O][ ]
+//
+// NOTE: maybe for future improvements: 8*3/2 = 12
+const float px_dist_x = 8;  // mm
+const float px_dist_y = 12; // mm
+
+typedef HatMatrix<NUMPIXELS, MATRIX_WIDTH, MATRIX_HEIGHT> MyHatMatrix;
+MyHatMatrix matrix(px_dist_x, px_dist_y);
+
+// fire animation
+SpaceBalls<MyHatMatrix> spaceBalls(matrix);
+
+// fire animation
+Fire<MyHatMatrix> fire(matrix);
 
 
 
 void setup() 
 {  
   Serial.begin(115200);
-  
-  // initialize the matrix values
-  for(int i = 0; i < kMatrixWidth * kMatrixHeight; ++i) {
-    XYTable[i] = (i % 2 == 0) ? i / 2 : NUMPIXELS;
-  }
-  
+
   //encoder.attachFullQuad ( DT_PIN, CLK_PIN );
   encoder.attachSingleEdge ( DT_PIN, CLK_PIN );
   encoder.setCount ( 0 );
@@ -93,12 +151,16 @@ void setup()
     bno.setExtCrystalUse(true);
   }
   
-
-  FastLED.addLeds<WS2812B, DATAPIN, GRB>(leds, NUMPIXELS);
-  FastLED.setBrightness(64);
+  //FastLED.addLeds<WS2812B, DATAPIN, GRB>(leds, NUMPIXELS);
+  //FastLED.addLeds<WS2812B, DATAPIN, GRB>(gfx.hatMatrix.getLEDArray(), gfx.hatMatrix.num_pixels());
+  FastLED.addLeds<WS2812B, DATAPIN, GRB>(matrix.getLEDArray(), matrix.num_pixels());
+  FastLED.setBrightness(255);
   FastLED.setDither(0);
 
+
   ScrollingMsg.SetFont(RobotronFontData);
+  //ScrollingMsg.SetFont(AtariFontData);
+  
   //ScrollingMsg.SetFont(MatriseFontData);
   ScrollingMsg.Init(&ledsm, ledsm.Width(), ScrollingMsg.FontHeight() + 1, 0, 5);
   ScrollingMsg.SetText((unsigned char *)TxtRainbowL, sizeof(TxtRainbowL) - 1);
@@ -106,44 +168,119 @@ void setup()
   ScrollingMsg.UpdateText();
 }
 
-int counter = 0;
-int x_offset = 0;
 
-void loop() 
+float last_angle = 0;
+float angle_diff = 0; // angle movement since last update
+
+void calculate_angle() 
 {
-  counter = encoder.getCount();
-  if(counter < 0) {
-    counter = 0;
-    encoder.setCount(counter);
-  } else if(counter >= kMatrixHeight) {
-    counter = kMatrixHeight;
-    encoder.setCount(counter);
+  // calculate angle
+  imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
+
+  float new_angle = euler.x();
+  angle_diff = new_angle - last_angle;
+  if(angle_diff > 180) {
+    angle_diff -= 360;
+  } else if(angle_diff < -180) {
+    angle_diff += 360;
   }
-  //Serial.println((int)counter);
 
-  FastLED.clear();
+  last_angle = new_angle;
+  Serial.println(last_angle);
+}
 
-  //if (ScrollingMsg.UpdateText() == -1)
-  //  ScrollingMsg.SetText((unsigned char *)TxtRainbowL, sizeof(TxtRainbowL) - 1);
 
+
+int text_position_x = 0;
+
+void update_text() 
+{
   // copy data
-  for( int x = 0; x < kMatrixWidth; ++x) {
-    for( int y = 0; y < kMatrixHeight; ++y) {
-      // set the led if the index is valid
-      uint16_t idx = XY((x + x_offset) % kMatrixWidth, (kMatrixHeight-1) - y);
-      if(idx < NUMPIXELS) {
-        leds[idx] = ledsm(x,y);
-      }
+  for( int x = 0; x < matrix.width(); ++x) {
+    for( int y = 0; y < matrix.height(); ++y) {
+      const int x_rotated = (x + text_position_x) % matrix.width();
+      matrix.pixel( (matrix.width()-1) - x_rotated, y) = ledsm(x,y);
     }
   }
 
-  x_offset = x_offset-1;
-  if (x_offset < 0) { 
-    x_offset += kMatrixWidth;
+  text_position_x = text_position_x - 1;
+  if (text_position_x < 0) { 
+    text_position_x += matrix.width();
   }
-  
-  Serial.println(x_offset);
+}
 
+
+int getEncoder() 
+{
+  const int maxCounter = 18;
+  int counter = encoder.getCount();
+  if(counter < 0) {
+    counter = 0;
+    encoder.setCount(counter);
+  } else if(counter >= maxCounter) {
+    counter = maxCounter;
+    encoder.setCount(counter);
+  }
+  //Serial.println(counter);
+  return counter;
+}
+
+
+int button_count_old = 0;
+int app_state = 0;
+unsigned long app_state_last_change_time = 0;
+
+void loop() 
+{
+  button.loop();
+  calculate_angle();
+  int counter = getEncoder();
+  
+  unsigned long app_state_time = millis() - app_state_last_change_time;
+  
+
+  int button_count = button.getCount();
+  if((app_state_time > 1000 && button_count != button_count_old) || app_state_time > 10000) {
+    app_state = (app_state + 1) % 4;
+    app_state_last_change_time = millis();
+  }
+  button_count_old = button_count;
+
+  switch(app_state) 
+  {
+    case 0: 
+      FastLED.clear();
+      FastLED.setBrightness(255);
+      counter = 10;
+      spaceBalls.draw_snow(counter*10); 
+      spaceBalls.update_imu(angle_diff); 
+      break;
+    case 1:
+      FastLED.clear();
+      FastLED.setBrightness(255);
+      counter = 10;
+      spaceBalls.draw_snow(counter*10); 
+      spaceBalls.update_bouncing();
+      break;
+    case 2: 
+      FastLED.clear();
+      FastLED.setBrightness(64);
+      fire.update(counter);
+      break;
+    case 3:
+      FastLED.clear();
+      FastLED.setBrightness(64);
+      update_text();
+      break;
+  }
+
+  /*
+  FastLED.clear();
+  gfx.drawRect(7,7,6,6,8);
+  gfx.println("A");
+  gfx.print(false);
+  */
+  
   FastLED.show();
   FastLED.delay(25);
 }
