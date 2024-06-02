@@ -4,6 +4,13 @@
 
 #include <Arduino.h>
 
+#include "Net.h"
+Net net;
+
+#include "WebServer.h"
+WebServer web_server(3001);
+
+
 #include <Adafruit_GFX.h>
 #include "HatMatrix.h"
 
@@ -49,7 +56,20 @@ Adafruit_BNO055 bno;
 cLEDMatrix<MATRIX_WIDTH, MATRIX_HEIGHT, MATRIX_TYPE> ledsm;
 cLEDText ScrollingMsg;
 const unsigned char TxtRainbowL[] = { EFFECT_HSV "\x00\xff\xff" "H" EFFECT_HSV "\x20\xff\xff" "+" EFFECT_HSV "\x40\xff\xff" "V" EFFECT_HSV "\x60\xff\xff" "=" EFFECT_HSV "\x80\xff\xff" "<3"};
+//const unsigned char TxtRainbowL[] = { EFFECT_RGB "\x00\x00\xff" "Max Test" EFFECT_RGB "\xff\xff\xff" };
 
+// int idx = 4 + i * 5;
+unsigned char TxtMessage[] = { 
+//     0       1    2   3    4
+  EFFECT_HSV "\x00\xff\xff" "M" // 0
+  EFFECT_HSV "\x20\xff\xff" "E" // 1 
+  EFFECT_HSV "\x40\xff\xff" "S" // 2 
+  EFFECT_HSV "\x60\xff\xff" "S" // 3 
+  EFFECT_HSV "\x80\xff\xff" "A" // 4
+  EFFECT_HSV "\xA0\xff\xff" "G" // 5 
+  EFFECT_HSV "\xC0\xff\xff" "E" // 6 
+  EFFECT_HSV "\xD0\xff\xff" "!" // 7 
+};
 
 class GFXTest : public GFXcanvas1 
 {
@@ -64,7 +84,7 @@ public:
 
   void print(bool rotated) 
   {
-    Serial.println("print");
+    //Serial.println("print");
     char pixel_buffer[8];
     uint16_t width, height;
   
@@ -133,6 +153,7 @@ Fire<MyHatMatrix> fire(matrix);
 void setup() 
 {  
   Serial.begin(115200);
+  while (!Serial) {};
 
   //encoder.attachFullQuad ( DT_PIN, CLK_PIN );
   encoder.attachSingleEdge ( DT_PIN, CLK_PIN );
@@ -163,9 +184,13 @@ void setup()
   
   //ScrollingMsg.SetFont(MatriseFontData);
   ScrollingMsg.Init(&ledsm, ledsm.Width(), ScrollingMsg.FontHeight() + 1, 0, 5);
-  ScrollingMsg.SetText((unsigned char *)TxtRainbowL, sizeof(TxtRainbowL) - 1);
+  //ScrollingMsg.SetText((unsigned char *)TxtRainbowL, sizeof(TxtRainbowL) - 1);
+  ScrollingMsg.SetText((unsigned char *)TxtMessage, sizeof(TxtMessage) - 1);
   ScrollingMsg.SetTextColrOptions(COLR_RGB | COLR_SINGLE, 0xff, 0x00, 0xff);
   ScrollingMsg.UpdateText();
+
+  net.connect("emf2024-open", "");
+  web_server.begin();
 }
 
 
@@ -186,15 +211,52 @@ void calculate_angle()
   }
 
   last_angle = new_angle;
-  Serial.println(last_angle);
+  //Serial.println(last_angle);
 }
 
 
 
 int text_position_x = 0;
+unsigned int time_of_last_message_displayed = 0;
+
+unsigned int time_of_last_message_pull = 0;
+
+#define MESSAGE_PULL_TIME 30000
+
+void set_text(String message) 
+{
+  for(int i = 0; i < 8; ++i) 
+  {
+    int idx = 4 + i * 5;
+    if(i < message.length()) {
+      TxtMessage[idx] = message.charAt(i);
+    } else {
+      TxtMessage[idx] = ' ';
+    }
+  }
+
+  ScrollingMsg.SetText((unsigned char *)TxtMessage, sizeof(TxtMessage) - 1);
+  ScrollingMsg.UpdateText();
+}
 
 void update_text() 
 {
+  // try to pull new message
+  if(time_of_last_message_pull == 0 || millis() > time_of_last_message_pull + MESSAGE_PULL_TIME) {
+    web_server.pull_new_message();
+    time_of_last_message_pull = millis();
+  }
+  
+  if(web_server.time_of_last_message != 0 && web_server.time_of_last_message > time_of_last_message_displayed) 
+  {
+      Serial.print("Update Message: ");
+      Serial.println(web_server.message);
+
+      set_text(web_server.message);
+
+      time_of_last_message_displayed = web_server.time_of_last_message;
+  }
+ 
   // copy data
   for( int x = 0; x < matrix.width(); ++x) {
     for( int y = 0; y < matrix.height(); ++y) {
@@ -212,7 +274,8 @@ void update_text()
 
 int getEncoder() 
 {
-  const int maxCounter = 18;
+  //const int maxCounter = 18;
+  const int maxCounter = 25;
   int counter = encoder.getCount();
   if(counter < 0) {
     counter = 0;
@@ -240,12 +303,18 @@ void loop()
   
 
   int button_count = button.getCount();
-  if((app_state_time > 1000 && button_count != button_count_old) || app_state_time > 10000) {
+  if((app_state_time > 1000 && button_count != button_count_old) || app_state_time > 10000) 
+  {
     app_state = (app_state + 1) % 4;
     app_state_last_change_time = millis();
   }
   button_count_old = button_count;
 
+  // there is a new message
+  if(millis() < time_of_last_message_displayed + MESSAGE_PULL_TIME + 1000) {
+    app_state = 3;
+  }
+  
   switch(app_state) 
   {
     case 0: 
@@ -269,7 +338,7 @@ void loop()
       break;
     case 3:
       FastLED.clear();
-      FastLED.setBrightness(64);
+      FastLED.setBrightness(counter*10+5);
       update_text();
       break;
   }
