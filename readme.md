@@ -84,8 +84,25 @@ Images and videos can be found here:
 
   <img height="200px" src="https://lh3.googleusercontent.com/pw/ADCreHfAraxBBvepx1nzkhzuUq3u9TGVKTsEIDUSPSTclefEHapiSxxujk7n3ziI_KdkkV8hsRw6TC_0I66lpovDgSUbQCUvqkbyxiicaQZpdgoq6iNVRAnl=w640-h480"/>
 
+### Untergeschoß der Pandora
+TBD
+
+### EMF 2024
+TBD
   
 </div>
+
+
+# Apps and API
+
+An interactive app that allows to show text on the hat deisplay. The app was developed at the EMF 2024.
+
+* LightHatApp online
+  http://hat.naoth.de
+  
+* Code
+  https://github.com/solen0id/light-hat-app
+
 
 # Used Libraries and Code
 
